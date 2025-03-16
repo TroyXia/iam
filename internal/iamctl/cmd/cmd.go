@@ -5,8 +5,11 @@ import (
 	"os"
 
 	cliflag "github.com/TroyXia/component-base/pkg/cli/flag"
+	"github.com/TroyXia/iam/internal/iamctl/util/templates"
 	"github.com/spf13/cobra"
-	"k8s.io/kubectl/pkg/util/templates"
+
+	cmdutil "github.com/TroyXia/iam/internal/iamctl/cmd/util"
+	"github.com/TroyXia/iam/pkg/cli/genericclioptions"
 )
 
 // NewDefaultIAMCtlCommand creates the `iamctl` command with default arguments.
@@ -43,6 +46,11 @@ func NewIAMCtlCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 	flags.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 
 	addProfilingFlags(flags)
+
+	iamConfigFlags := genericclioptions.NewConfigFlags(true).WithDeprecatedPasswordFlag().WithDeprecatedSecretFlag()
+	iamConfigFlags.AddFlags(flags)
+	matchVersionIAMConfigFlags := cmdutil.NewMatchVersionFlags(iamConfigFlags)
+	matchVersionIAMConfigFlags.AddFlags(cmds.PersistentFlags())
 
 	return cmds
 }
