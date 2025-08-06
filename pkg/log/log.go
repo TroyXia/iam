@@ -4,10 +4,12 @@ import (
 	"github.com/TroyXia/iam/pkg/log/klog"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"sync"
 )
 
 var (
 	std = New(NewOptions())
+	mu  sync.Mutex
 )
 
 // NB: right now, we always use the equivalent of sugared logging.
@@ -94,6 +96,11 @@ func New(opts *Options) *zapLogger {
 	return logger
 }
 
+// Info method output info level log.
+func Info(msg string, fields ...Field) {
+	std.zapLogger.Info(msg, fields...)
+}
+
 // Infof method output info level log.
 func Infof(format string, v ...interface{}) {
 	std.zapLogger.Sugar().Infof(format, v...)
@@ -106,4 +113,24 @@ func (l *zapLogger) Infof(format string, v ...interface{}) {
 // Warnf method output warning level log.
 func Warnf(format string, v ...interface{}) {
 	std.zapLogger.Sugar().Warnf(format, v...)
+}
+
+// Fatal method output fatal level log.
+func Fatal(msg string, fields ...Field) {
+	std.zapLogger.Fatal(msg, fields...)
+}
+
+// Init initializes logger with specified options.
+func Init(opts *Options) {
+	mu.Lock()
+	defer mu.Unlock()
+	std = New(opts)
+}
+
+// Flush calls the underlying Core's Sync method, flushing any buffered
+// log entries. Applications should take care to call Sync before exiting.
+func Flush() { std.Flush() }
+
+func (l *zapLogger) Flush() {
+	_ = l.zapLogger.Sync()
 }
