@@ -49,6 +49,12 @@ func initGenericAPIServer(s *GenericAPIServer) {
 
 // InstallAPIs install generic apis.
 func (s *GenericAPIServer) InstallAPIs() {
+	if s.healthz {
+		s.GET("/healthz", func(c *gin.Context) {
+			core.WriteResponse(c, nil, map[string]string{"status": "ok"})
+		})
+	}
+	
 	s.GET("/version", func(c *gin.Context) {
 		core.WriteResponse(c, nil, version.Get())
 	})
@@ -85,20 +91,20 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 func (s *GenericAPIServer) Run() error {
 	// For scalability, use custom HTTP configuration mode here
 	s.insecureServer = &http.Server{
-		Addr:    s.InsecureServingInfo.Address,
-		Handler: s,
-		// ReadTimeout:    10 * time.Second,
-		// WriteTimeout:   10 * time.Second,
-		// MaxHeaderBytes: 1 << 20,
+		Addr:           s.InsecureServingInfo.Address,
+		Handler:        s,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
 	}
 
 	// For scalability, use custom HTTP configuration mode here
 	s.secureServer = &http.Server{
-		Addr:    s.SecureServingInfo.Address(),
-		Handler: s,
-		// ReadTimeout:    10 * time.Second,
-		// WriteTimeout:   10 * time.Second,
-		// MaxHeaderBytes: 1 << 20,
+		Addr:           s.SecureServingInfo.Address(),
+		Handler:        s,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
 	}
 
 	var eg errgroup.Group

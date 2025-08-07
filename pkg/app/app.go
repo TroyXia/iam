@@ -130,7 +130,7 @@ func (a *App) buildCommand() {
 		verflag.AddFlags(namedFlagSets.FlagSet("global"))
 	}
 	if !a.noConfig {
-		//addConfigFlag(a.basename, namedFlagSets.FlagSet("global"))
+		addConfigFlag(a.basename, namedFlagSets.FlagSet("global"))
 	}
 	globalflag.AddGlobalFlags(namedFlagSets.FlagSet("global"), cmd.Name())
 	// add new global flagset to cmd FlagSet

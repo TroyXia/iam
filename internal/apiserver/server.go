@@ -62,20 +62,18 @@ func buildGenericConfig(cfg *config.Config) (genericConfig *genericapiserver.Con
 		return
 	}
 
-	/*
-		if lastErr = cfg.FeatureOptions.ApplyTo(genericConfig); lastErr != nil {
-			return
-		}
+	if lastErr = cfg.FeatureOptions.ApplyTo(genericConfig); lastErr != nil {
+		return
+	}
 
-		if lastErr = cfg.SecureServing.ApplyTo(genericConfig); lastErr != nil {
-			return
-		}
+	if lastErr = cfg.SecureServing.ApplyTo(genericConfig); lastErr != nil {
+		return
+	}
 
-		if lastErr = cfg.InsecureServing.ApplyTo(genericConfig); lastErr != nil {
-			return
-		}
+	if lastErr = cfg.InsecureServing.ApplyTo(genericConfig); lastErr != nil {
+		return
+	}
 
-	*/
 	return
 }
 

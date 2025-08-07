@@ -129,7 +129,9 @@ func Init(opts *Options) {
 
 // Flush calls the underlying Core's Sync method, flushing any buffered
 // log entries. Applications should take care to call Sync before exiting.
-func Flush() { std.Flush() }
+func Flush() {
+	std.Flush()
+}
 
 func (l *zapLogger) Flush() {
 	_ = l.zapLogger.Sync()

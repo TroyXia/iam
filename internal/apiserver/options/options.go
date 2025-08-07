@@ -29,7 +29,7 @@ func NewOptions() *Options {
 		//MySQLOptions:            genericoptions.NewMySQLOptions(),
 		//RedisOptions:            genericoptions.NewRedisOptions(),
 		//JwtOptions:              genericoptions.NewJwtOptions(),
-		//Log:                     log.NewOptions(),
+		Log: log.NewOptions(),
 		//FeatureOptions:          genericoptions.NewFeatureOptions(),
 	}
 
